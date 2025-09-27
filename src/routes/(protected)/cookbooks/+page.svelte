@@ -24,10 +24,10 @@
 		{#each data.cookbooks as cookbook (cookbook.id)}
 			<a
 				href={`/cookbooks/${cookbook.id}`}
-				class="group block bg-white rounded-lg shadow-md hover:shadow-xl transition-shadow duration-300 overflow-hidden"
+				class="group block bg-white rounded-lg shadow-md overflow-hidden transition-all duration-300 ease-in-out hover:shadow-xl hover:scale-105"
 			>
-				<div class="h-48 bg-gray-200 flex items-center justify-center">
-					<!-- Placeholder for cover image -->
+				<div class="h-48 bg-gray-200 flex items-center justify-center relative overflow-hidden">
+					<div class="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent"></div>
 					<svg
 						class="w-16 h-16 text-gray-400"
 						fill="none"

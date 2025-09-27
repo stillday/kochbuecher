@@ -40,7 +40,7 @@
 		&larr; Zurück {cookbook ? `zum Kochbuch "${cookbook.title}"` : 'zur Übersicht'}
 	</a>
 
-	<div class="bg-white rounded-lg shadow-md overflow-hidden">
+	<div class="bg-white rounded-lg shadow-xl overflow-hidden">
 		<div class="p-6 md:p-8">
 			<div class="flex justify-between items-start">
 				<div>
@@ -66,13 +66,13 @@
 				<div class="flex-shrink-0 flex space-x-2">
 					<button
 						on:click={generateBringPayload}
-						class="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-green-600 hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500"
+						class="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-green-600 hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500 transition-transform hover:scale-105"
 					>
 						Einkaufsliste
 					</button>
 					<button
 						on:click={() => showShareModal = true}
-						class="inline-flex items-center px-4 py-2 border border-gray-300 text-sm font-medium rounded-md shadow-sm text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+						class="inline-flex items-center px-4 py-2 border border-gray-300 text-sm font-medium rounded-md shadow-sm text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transition-transform hover:scale-105"
 					>
 						Teilen
 					</button>
@@ -80,29 +80,34 @@
 			</div>
 		</div>
 
-		<div class="grid grid-cols-1 md:grid-cols-3 gap-8 px-6 md:px-8 pb-8">
-			<!-- Ingredients List -->
-			<div class="md:col-span-1">
-				<h2 class="text-xl font-semibold text-gray-800 border-b pb-2 mb-4">Zutaten</h2>
-				<ul class="space-y-2 text-gray-700">
-					{#if ingredients && ingredients.length > 0}
-						{#each ingredients as item}
-							<li class="flex">
-								<span class="font-semibold w-20 text-right pr-2">{item.amount || ''} {item.unit || ''}</span>
-								<span>{item.ingredients.name}</span>
-							</li>
-						{/each}
-					{:else}
-						<li>Keine Zutaten angegeben.</li>
-					{/if}
-				</ul>
-			</div>
+		<div class="border-t border-gray-200">
+			<div class="grid grid-cols-1 md:grid-cols-3 gap-x-8 gap-y-12 px-6 md:px-8 py-8">
+				<!-- Ingredients List -->
+				<div class="md:col-span-1">
+					<h2 class="text-2xl font-bold text-gray-900 mb-4">Zutaten</h2>
+					<ul class="space-y-3 text-gray-700">
+						{#if ingredients && ingredients.length > 0}
+							{#each ingredients as item}
+								<li class="flex items-start border-b border-gray-100 pb-3">
+									<svg class="h-5 w-5 text-indigo-500 mr-3 flex-shrink-0 mt-0.5" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75L11.25 15 15 9.75M21 12a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
+									<div>
+										<span class="font-semibold">{item.amount || ''} {item.unit || ''}</span>
+										<span class="ml-2">{item.ingredients.name}</span>
+									</div>
+								</li>
+							{/each}
+						{:else}
+							<li>Keine Zutaten angegeben.</li>
+						{/if}
+					</ul>
+				</div>
 
-			<!-- Notes / Instructions -->
-			<div class="md:col-span-2">
-				<h2 class="text-xl font-semibold text-gray-800 border-b pb-2 mb-4">Zubereitung</h2>
-				<div class="prose max-w-none text-gray-800">
-					{@html recipe.notes ? recipe.notes.replace(/\\n/g, '<br>') : '<p>Keine Anleitung vorhanden.</p>'}
+				<!-- Notes / Instructions -->
+				<div class="md:col-span-2">
+					<h2 class="text-2xl font-bold text-gray-900 mb-4">Zubereitung</h2>
+					<div class="prose prose-indigo lg:prose-lg max-w-none text-gray-800">
+						{@html recipe.notes ? recipe.notes.replace(/\\n/g, '<br>') : '<p>Keine Anleitung vorhanden.</p>'}
+					</div>
 				</div>
 			</div>
 		</div>

@@ -119,7 +119,7 @@
 							<button
 								type="button"
 								on:click={() => removeIngredient(ingredient.id)}
-								class="text-red-500 hover:text-red-700 p-2 rounded-full"
+								class="text-red-500 hover:text-red-700 p-2 rounded-full transition-transform hover:scale-110"
 								aria-label="Zutat entfernen"
 							>
 								<Trash2 class="w-5 h-5" />
@@ -131,7 +131,7 @@
 			<button
 				type="button"
 				on:click={addIngredient}
-				class="mt-4 inline-flex items-center text-indigo-600 hover:text-indigo-800"
+				class="mt-4 inline-flex items-center text-indigo-600 hover:text-indigo-800 transition-transform hover:scale-105"
 			>
 				<PlusCircle class="w-5 h-5 mr-2" />
 				Zutat hinzufügen
@@ -158,7 +158,7 @@
 		<div class="flex justify-end">
 			<button
 				type="submit"
-				class="inline-flex items-center justify-center px-6 py-2 border border-transparent text-base font-medium rounded-md shadow-sm text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+				class="inline-flex items-center justify-center px-6 py-2 border border-transparent text-base font-medium rounded-md shadow-sm text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transition-transform duration-200 ease-in-out hover:scale-105"
 			>
 				Rezept speichern
 			</button>
@@ -174,6 +174,7 @@
 		border-radius: theme(borderRadius.md);
 		padding: theme(spacing.2) theme(spacing.3);
 		width: 100%;
+		transition: border-color 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
 	}
 	.input:focus {
 		outline: 2px solid transparent;
