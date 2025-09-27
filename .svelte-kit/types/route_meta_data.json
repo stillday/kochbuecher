@@ -1,0 +1,34 @@
+{
+	"/(protected)": [
+		"src/routes/(protected)/+layout.server.ts"
+	],
+	"/": [],
+	"/(protected)/cookbooks": [
+		"src/routes/(protected)/cookbooks/+page.server.ts",
+		"src/routes/(protected)/+layout.server.ts"
+	],
+	"/(protected)/cookbooks/new": [
+		"src/routes/(protected)/cookbooks/new/+page.server.ts",
+		"src/routes/(protected)/+layout.server.ts"
+	],
+	"/(protected)/cookbooks/[id]": [
+		"src/routes/(protected)/cookbooks/[id]/+page.server.ts",
+		"src/routes/(protected)/+layout.server.ts"
+	],
+	"/forgot-password": [],
+	"/login": [],
+	"/(protected)/recipes/new": [
+		"src/routes/(protected)/recipes/new/+page.server.ts",
+		"src/routes/(protected)/+layout.server.ts"
+	],
+	"/(protected)/recipes/[id]": [
+		"src/routes/(protected)/recipes/[id]/+page.server.ts",
+		"src/routes/(protected)/+layout.server.ts"
+	],
+	"/register": [],
+	"/(protected)/shared-with-me": [
+		"src/routes/(protected)/shared-with-me/+page.server.ts",
+		"src/routes/(protected)/+layout.server.ts"
+	],
+	"/update-password": []
+}
