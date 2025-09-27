@@ -1,5 +1,5 @@
-import { error } from '@sveltejs/kit';
-import type { PageServerLoad } from './$types';
+import { error, fail } from '@sveltejs/kit';
+import type { PageServerLoad, Actions } from './$types';
 
 export const load: PageServerLoad = async ({ params, locals: { supabase, getSession } }) => {
 	const session = await getSession();
@@ -49,4 +49,63 @@ export const load: PageServerLoad = async ({ params, locals: { supabase, getSess
 	}
 
 	return { recipe, ingredients };
+};
+
+export const actions: Actions = {
+	share: async ({ request, params, locals: { supabase, getSession } }) => {
+		const session = await getSession();
+		if (!session) {
+			return fail(401, { message: 'Nicht authentifiziert' });
+		}
+
+		const formData = await request.formData();
+		const emailToShareWith = formData.get('email') as string;
+
+		if (!emailToShareWith) {
+			return fail(400, { message: 'E-Mail-Adresse ist erforderlich.', email: emailToShareWith });
+		}
+
+		// 1. Find the user to share with
+		const { data: profileToShareWith, error: profileError } = await supabase
+			.from('profiles')
+			.select('id')
+			.eq('username', emailToShareWith) // Assuming email is stored in username field
+			.single();
+
+		if (profileError || !profileToShareWith) {
+			return fail(404, {
+				message: `Benutzer mit der E-Mail "${emailToShareWith}" nicht gefunden.`,
+				email: emailToShareWith
+			});
+		}
+
+		// 2. Check if user is trying to share with themselves
+		if (profileToShareWith.id === session.user.id) {
+			return fail(400, { message: 'Sie können ein Rezept nicht mit sich selbst teilen.', email: emailToShareWith });
+		}
+
+		const recipeId = params.id;
+
+		// 3. Insert the share record
+		const { error: shareError } = await supabase.from('recipe_shares').insert({
+			recipe_id: Number(recipeId),
+			shared_by_user_id: session.user.id,
+			shared_with_user_id: profileToShareWith.id,
+			can_edit: false // Defaulting to read-only access for now
+		});
+
+		if (shareError) {
+			// Handle potential unique constraint violation (already shared)
+			if (shareError.code === '23505') {
+				return fail(409, {
+					message: 'Dieses Rezept ist bereits mit diesem Benutzer geteilt.',
+					email: emailToShareWith
+				});
+			}
+			console.error('Error sharing recipe:', shareError);
+			return fail(500, { message: 'Rezept konnte nicht geteilt werden.', email: emailToShareWith });
+		}
+
+		return { success: true, message: `Rezept erfolgreich mit ${emailToShareWith} geteilt!` };
+	}
 };

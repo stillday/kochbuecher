@@ -52,6 +52,7 @@
 					{#if $user}
 						<span class="text-gray-700">Hallo, {$user.email?.split('@')[0]}</span>
 						<a href="/cookbooks" class="text-gray-600 hover:text-indigo-600">Meine Kochbücher</a>
+						<a href="/shared-with-me" class="text-gray-600 hover:text-indigo-600">Mit mir geteilt</a>
 						<button
 							on:click={handleLogout}
 							class="px-3 py-2 bg-red-500 text-white text-sm font-medium rounded-md hover:bg-red-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500"
