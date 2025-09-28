@@ -3,36 +3,21 @@ import { createServerClient } from '@supabase/ssr';
 import type { Handle } from '@sveltejs/kit';
 
 export const handle: Handle = async ({ event, resolve }) => {
-	/**
-	 * Creates a Supabase client specific to this server request.
-	 *
-	 * The Supabase client gets the session from the request cookies.
-	 */
-	event.locals.supabase = createServerClient(
-		PUBLIC_SUPABASE_URL,
-		PUBLIC_SUPABASE_ANON_KEY,
-		{
-			cookies: {
-				get: (key) => event.cookies.get(key),
-				/**
-				 * SvelteKit's cookies API requires `path` to be explicitly set in
-				 * the cookie options. Setting `path` to `/` makes the cookie
-				 * available across the entire domain.
-				 */
-				set: (key, value, options) => {
-					event.cookies.set(key, value, { ...options, path: '/' });
-				},
-				remove: (key, options) => {
-					event.cookies.delete(key, { ...options, path: '/' });
-				}
+	event.locals.supabase = createServerClient(PUBLIC_SUPABASE_URL, PUBLIC_SUPABASE_ANON_KEY, {
+		cookies: {
+			get: (key) => event.cookies.get(key),
+			set: (key, value, options) => {
+				event.cookies.set(key, value, { ...options, path: '/' });
+			},
+			remove: (key, options) => {
+				event.cookies.delete(key, { ...options, path: '/' });
 			}
 		}
-	);
+	});
 
 	/**
-	 * Unlike `supabase.auth.getSession()`, which returns the session _without_
-	 * validating the JWT, this function also calls `getUser()` to validate the
-	 * JWT before returning the session.
+	 * A convenience helper so we can just call await getSession() instead of
+	 * event.locals.supabase.auth.getSession()
 	 */
 	event.locals.getSession = async () => {
 		const {
@@ -40,6 +25,12 @@ export const handle: Handle = async ({ event, resolve }) => {
 		} = await event.locals.supabase.auth.getSession();
 		return session;
 	};
+
+	// This is the crucial part that was missing:
+	// We retrieve the session here and attach it to `event.locals`
+	// so it's available on all server-side routes.
+	event.locals.session = await event.locals.getSession();
+
 
 	return resolve(event, {
 		filterSerializedResponseHeaders(name) {
